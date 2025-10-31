@@ -1,152 +1,234 @@
-# 🏋️‍♂️ AI Fitness & Class Scheduler
+# 🏋️‍♂️ Online Fitness Class Platform
 
-A **full-stack AI-powered fitness and class management platform** built using **React.js, Express.js, MySQL, and Prisma ORM**.  
-This system enables users to **book fitness classes (online & offline)**, **scan their body for AI-generated workout recommendations**, and **track their progress** — all in one sleek, responsive web app.
+## 📖 Overview
 
----
+This project is an **Online Fitness Class Platform** where users can join 1-hour fitness sessions online.
+Unlike traditional video calls (like Zoom), each class is **self-paced** and provides:
 
-## 🧭 Table of Contents
-- [Introduction](#-introduction)
-- [Goals](#-goals)
-- [Features](#-features)
-- [Technology Stack](#-technology-stack)
-- [Database Schema](#-database-schema)
-- [Project Timeline](#-project-timeline)
-- [Future Enhancements](#-future-enhancements)
-- [Conclusion](#-conclusion)
+* A **1-hour timer** for the active session.
+* **6–7 workouts** displayed on the UI.
+* **Demo videos** showing how to perform each workout.
+* The ability to **start, pause, and complete** classes seamlessly.
+
+No external meeting links — everything happens within the app.
 
 ---
 
-## 🧾 Introduction
-**AI Fitness & Class Scheduler** revolutionizes how users plan, attend, and manage their fitness routines.  
-The application combines **AI-based body analysis**, **real-time class booking**, and **personalized workout suggestions**, making fitness management efficient, data-driven, and tailored to individual needs.
+## 🚀 Features
 
-Whether it’s booking an offline gym session or joining an online yoga class, users can manage everything seamlessly through this platform.
+### 👤 User Features
 
----
+* Register and log in securely.
+* View available fitness classes.
+* Join a class — the **1-hour timer** starts immediately.
+* View **6–7 workouts** for each class.
+* Watch **tutorial videos** for each workout.
+* Class auto-ends when the timer completes.
 
-## 🎯 Goals
-- Simplify **fitness class scheduling** for users and trainers.  
-- Provide **AI-driven workout recommendations** based on body scans.  
-- Support **both online and offline** fitness sessions.  
-- Maintain a **secure, scalable, and user-friendly** experience.  
+### ⚙️ Admin Features
 
----
-
-## ⚙️ Features
-
-| # | Feature | Description | Rationale | Implementation |
-|---|----------|--------------|------------|----------------|
-| 1 | **User Authentication & Roles** | Secure login/signup with bcrypt & JWT. Roles: User, Trainer, Admin. | Ensures privacy and access control. | Frontend: React Context API. Backend: Express Auth Routes. DB: Prisma User model. |
-| 2 | **Class Booking System** | Users can browse, filter, and book fitness classes. | Core scheduling functionality. | Frontend: React forms & cards. Backend: Class CRUD routes. DB: Class + Booking models. |
-| 3 | **Online & Offline Classes** | Supports in-person and live virtual sessions via Zoom/Meet links. | Expands flexibility and reach. | DB field: `type (ONLINE/OFFLINE)` and `meetLink`. |
-| 4 | **Trainer Dashboard** | Trainers can create, edit, and cancel classes. | Simplifies class management. | React dashboard UI + Express routes. |
-| 5 | **AI Body Scan & Recommendations** | Analyze user body image and provide exercise suggestions. | Introduces personalization via AI. | AI Vision API (e.g., MediaPipe, DeepAI) + custom logic. |
-| 6 | **Personalized Exercise Plans** | AI suggests classes/exercises (e.g., weight loss, yoga). | Delivers value through data-driven insights. | Express middleware for recommendations. |
-| 7 | **Progress Tracking & Analytics** | Users can track weight, BMI, and booked sessions. | Improves user engagement. | Frontend: Recharts / Chart.js. Backend: Prisma aggregates. |
-| 8 | **Trainer & Admin Panels** | Manage users, bookings, and classes. | Ensures control and scalability. | Role-based routes + admin UI. |
-| 9 | **Email Reminders / Notifications** | Notify users of upcoming sessions or cancellations. | Boosts user retention. | Nodemailer (backend) + Toast alerts (frontend). |
-| 10 | **Responsive & Modern UI** | Fully responsive with animations and dark mode. | Enhances UX and accessibility. | TailwindCSS + Framer Motion. |
+* Add, update, or remove classes.
+* Upload or edit workout videos.
+* Manage user progress and feedback.
 
 ---
 
-## 🧩 Technology Stack
+## 🧱 Tech Stack
 
-| Layer | Technology | Purpose / Reasoning |
-|--------|-------------|---------------------|
-| **Frontend** | React.js (Vite) | Component-based SPA, smooth performance. |
-| **Routing** | React Router v6 | Seamless navigation between pages. |
-| **State Management** | Context API / Redux Toolkit | Manage auth, bookings, and class data. |
-| **UI Design** | TailwindCSS + Framer Motion | Responsive design + animations. |
-| **Backend** | Node.js + Express.js | RESTful API server for scalability. |
-| **Database ORM** | Prisma ORM | Schema definition, migrations, and type safety. |
-| **Database** | MySQL | Relational structure for classes, users, bookings. |
-| **Authentication** | JWT + bcrypt + Google OAuth | Secure and flexible user sessions. |
-| **AI Integration** | MediaPipe / DeepAI / RapidAPI | Body scan and posture analysis. |
-| **Email Notifications** | Nodemailer | Send class reminders and updates. |
-| **Charts & Analytics** | Chart.js / Recharts | Visual representation of progress. |
-| **Deployment** | Frontend: Vercel / Netlify<br>Backend: Render / Railway<br>DB: PlanetScale | Cloud-based CI/CD and scalability. |
-| **Version Control** | Git + GitHub | Collaboration and version management. |
+| Layer              | Technology                                 |
+| ------------------ | ------------------------------------------ |
+| **Frontend**       | React.js / HTML / CSS / JavaScript         |
+| **Backend**        | Node.js, Express.js                        |
+| **Database**       | PostgreSQL / MySQL / MongoDB (your choice) |
+| **ORM**            | Prisma ORM                                 |
+| **Authentication** | JWT (JSON Web Token)                       |
+| **Storage**        | Cloud / Local storage for video files      |
 
 ---
 
-## 🧱 Database Schema
+## 🗄️ Database Design
 
-### **User**
-```
-id (PK)
-name
-email
-password
-role (USER/TRAINER/ADMIN)
-bodyMetrics (JSON)
-recommendations (String)
-createdAt
-```
+### 🔹 Entity-Relationship Diagram (ER Diagram)
 
-### **Class**
 ```
-id (PK)
-title
-description
-trainer
-date
-duration
-maxCapacity
-type (ONLINE/OFFLINE)
-meetLink
-createdAt
-```
+        ┌────────────┐
+        │   USER     │
+        └────┬───────┘
+             │ 1
+             │
+             │ M
+      ┌──────▼────────┐
+      │   CLASS       │
+      └────┬──────────┘
+           │ 1
+           │
+           │ M
+     ┌─────▼──────────┐
+     │   WORKOUT      │
+     └────┬───────────┘
+          │ 1
+          │
+          │ M
+    ┌─────▼────────────┐
+    │   VIDEO          │
+    └──────────────────┘
 
-### **Booking**
-```
-id (PK)
-userId (FK -> User)
-classId (FK -> Class)
-createdAt
-```
-
-### **Progress**
-```
-id (PK)
-userId (FK -> User)
-bmi
-weight
-updatedAt
+    USER ──< CLASS_PROGRESS >── CLASS
 ```
 
 ---
 
-## 🕒 Project Timelines 
+## 🧩 Database Schema (Tables)
 
+### 1️⃣ **Users Table**
 
-| Phase | Tasks | Duration |
-|--------|-------|-----------|
-| **Phase 1: Setup & Auth** | Initialize project, Prisma schema, JWT auth | Week 1 |
-| **Phase 2: Class Booking System** | Class CRUD, trainer dashboard | Week 2 |
-| **Phase 3: Online Class Integration** | Add online/offline logic + meeting links | Week 3 |
-| **Phase 4: AI Body Scan Module** | Integrate AI API + recommendation system | Week 4 |
-| **Phase 5: Analytics & Notifications** | Add progress tracking, charts, email reminders | Week 5 |
-| **Phase 6: UI/UX Polish & Deployment** | Tailwind, animations, deploy full stack | Week 6 |
+Stores user information.
 
----
-
-## 🚀 Future Enhancements
-
-| Feature | Description |
-|----------|--------------|
-| 🧠 **AI Chat Coach** | Personalized AI chatbot for exercise tips & routines. |
-| 📱 **PWA Version** | Offline-accessible mobile-friendly version. |
-| 📊 **Advanced Health Insights** | Predict trends using stored health data. |
-| 🩺 **Smart Device Integration** | Connect wearables or Google Fit for live data. |
-| 💳 **Payment Gateway** | Add Stripe/Razorpay for paid classes. |
-| 🧍 **Waitlist System** | Join waitlists when classes are full. |
-| 🌗 **Dark/Light Mode Toggle** | Improved UI accessibility. |
+| Column       | Type                          | Description          |
+| ------------ | ----------------------------- | -------------------- |
+| user_id (PK) | INT                           | Unique user ID       |
+| name         | VARCHAR(100)                  | Full name            |
+| email        | VARCHAR(100)                  | Unique email         |
+| password     | VARCHAR(255)                  | Hashed password      |
+| age          | INT                           | User age             |
+| gender       | ENUM('Male','Female','Other') | Gender               |
+| joined_on    | DATETIME                      | Date of registration |
 
 ---
 
-## 🏁 Conclusion
-The **AI Fitness & Class Scheduler** merges fitness, technology, and artificial intelligence to create a **modern, user-centric experience**.  
-With its seamless scheduling, online sessions, and AI-driven body analysis, it stands out as a next-generation fitness management solution — scalable, secure, and intelligent.  
+### 2️⃣ **Classes Table**
 
-This project demonstrates **end-to-end full-stack development**, **AI integration**, and **real-world application design** — perfect for both academic portfolios and professional showcases.
+Each fitness class (1 hour per session).
+
+| Column        | Type         | Description             |
+| ------------- | ------------ | ----------------------- |
+| class_id (PK) | INT          | Unique ID               |
+| class_name    | VARCHAR(100) | e.g., “Full Body Burn”  |
+| description   | TEXT         | Class overview          |
+| duration      | INT          | In minutes (default 60) |
+| start_time    | DATETIME     | Start time of class     |
+| end_time      | DATETIME     | End time (auto +1 hour) |
+
+---
+
+### 3️⃣ **Workouts Table**
+
+Workouts linked to each class.
+
+| Column          | Type         | Description               |
+| --------------- | ------------ | ------------------------- |
+| workout_id (PK) | INT          | Unique workout ID         |
+| class_id (FK)   | INT          | Linked class              |
+| name            | VARCHAR(100) | Workout name              |
+| reps            | VARCHAR(50)  | e.g., “3 sets of 15 reps” |
+| description     | TEXT         | Workout details           |
+
+---
+
+### 4️⃣ **Videos Table**
+
+Videos explaining workouts.
+
+| Column          | Type         | Description         |
+| --------------- | ------------ | ------------------- |
+| video_id (PK)   | INT          | Unique video ID     |
+| workout_id (FK) | INT          | Linked workout      |
+| video_url       | VARCHAR(255) | Video file/link     |
+| thumbnail_url   | VARCHAR(255) | Thumbnail image     |
+| duration        | INT          | Duration in seconds |
+
+---
+
+### 5️⃣ **Class_Progress Table**
+
+Tracks each user’s class status.
+
+| Column           | Type                                          | Description            |
+| ---------------- | --------------------------------------------- | ---------------------- |
+| progress_id (PK) | INT                                           | Unique progress record |
+| user_id (FK)     | INT                                           | Linked user            |
+| class_id (FK)    | INT                                           | Linked class           |
+| start_time       | DATETIME                                      | When the user started  |
+| end_time         | DATETIME                                      | start_time + 1 hour    |
+| time_remaining   | INT                                           | Remaining seconds      |
+| status           | ENUM('Not Started','In Progress','Completed') | Current state          |
+
+---
+
+## 🕐 Timer Functionality
+
+* When the user **joins a class**, a record is created in `class_progress`.
+* Backend stores `start_time` and `end_time`.
+* Frontend displays a **countdown timer (60:00)**.
+* Timer stops at 0 → class is marked **Completed**.
+* If the user leaves midway, `time_remaining` saves progress.
+
+---
+
+## ⚡ API Endpoints (Example)
+
+| Method | Endpoint                 | Description              |
+| ------ | ------------------------ | ------------------------ |
+| POST   | `/api/register`          | Register a new user      |
+| POST   | `/api/login`             | Login with JWT           |
+| GET    | `/api/classes`           | Fetch all classes        |
+| POST   | `/api/join/:classId`     | Start a class session    |
+| GET    | `/api/progress/:userId`  | View progress            |
+| GET    | `/api/workouts/:classId` | Get workouts for a class |
+| GET    | `/api/videos/:workoutId` | Get videos for a workout |
+
+---
+
+## 🔐 Authentication (JWT)
+
+* JWT is used to protect routes.
+* When a user logs in, a **JWT token** is issued.
+* Protected routes (like joining class, viewing progress) require a valid token in headers.
+
+---
+
+## 💻 Installation
+
+1. Clone the repository
+
+   ```bash
+   git clone https://github.com/yourusername/online-fitness-platform.git
+   ```
+2. Navigate to the project
+
+   ```bash
+   cd online-fitness-platform
+   ```
+3. Install dependencies
+
+   ```bash
+   npm install
+   ```
+4. Configure `.env` file
+
+   ```env
+   DATABASE_URL="your_database_url_here"
+   JWT_SECRET="your_secret_key"
+   ```
+5. Run the development server
+
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🧠 Future Enhancements
+
+* Add personalized workout recommendations.
+* Add streak tracking and daily challenges.
+* Introduce subscription plans and payments.
+* Enable live chat with fitness trainers.
+
+---
+
+
+## ✨ Author
+
+Developed by **Garv Sudip Harshit Yash** ❤️
+For learning, practice, and portfolio purposes.
