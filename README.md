@@ -175,6 +175,7 @@ A fully functional, AI-integrated fitness platform that:
 | workout_id (FK) | INT          | Linked workout      |
 | video_url       | VARCHAR(255) | Path to video file  |
 | thumbnail_url   | VARCHAR(255) | Video thumbnail     |
+| video_url       | VARCHAR(255) | Video file/link     |    |
 | duration        | INT          | Duration in seconds |
 
 ---
