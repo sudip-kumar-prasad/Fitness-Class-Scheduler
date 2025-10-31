@@ -76,7 +76,7 @@ model ClassProgress {
   user            User     @relation(fields: [user_id], references: [user_id])
   class           Class    @relation(fields: [class_id], references: [class_id])
 }
-
+//adding comment
 enum Gender {
   Male
   Female
