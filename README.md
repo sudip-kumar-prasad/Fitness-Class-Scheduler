@@ -1,76 +1,124 @@
-# 🏋️‍♂️ Online Fitness Class Platform
+# 🏋️‍♂️ AI-Powered Online Fitness Class Platform
 
 ## 📖 Overview
 
-This project is an **Online Fitness Class Platform** where users can join 1-hour fitness sessions online.
-Unlike traditional video calls (like Zoom), each class is **self-paced** and provides:
+The **AI-Powered Online Fitness Class Platform** is a full-stack web application built using **React.js**, **Express.js**, **MySQL**, and **Prisma ORM**.
+It allows users to sign up, schedule online fitness classes, and experience AI-powered personalized workout sessions — all inside a modern, responsive interface.
 
-* A **1-hour timer** for the active session.
-* **6–7 workouts** displayed on the UI.
-* **Demo videos** showing how to perform each workout.
-* The ability to **start, pause, and complete** classes seamlessly.
-
-No external meeting links — everything happens within the app.
+Each session runs for **1 hour**, during which the user can view **6–7 curated workouts** and optionally watch **demo videos** to learn the correct form.
+At the end, an **AI assistant** analyzes the user’s measurements and recommends the best path to achieving their fitness goals.
 
 ---
 
-## 🚀 Features
+## 💡 Ideation Document
 
-### 👤 User Features
+### 🧩 Problem Statement
 
-* Register and log in securely.
-* View available fitness classes.
-* Join a class — the **1-hour timer** starts immediately.
-* View **6–7 workouts** for each class.
-* Watch **tutorial videos** for each workout.
-* Class auto-ends when the timer completes.
-
-### ⚙️ Admin Features
-
-* Add, update, or remove classes.
-* Upload or edit workout videos.
-* Manage user progress and feedback.
+Many fitness enthusiasts face difficulties staying consistent and finding structured, guided workouts.
+Existing apps either lack **AI personalization** or depend on **third-party platforms** (like Zoom), making fitness tracking fragmented and less engaging.
 
 ---
 
-## 🧱 Tech Stack
+### 💡 Proposed Solution
 
-| Layer              | Technology                                 |
-| ------------------ | ------------------------------------------ |
-| **Frontend**       | React.js / HTML / CSS / JavaScript         |
-| **Backend**        | Node.js, Express.js                        |
-| **Database**       | PostgreSQL / MySQL / MongoDB (your choice) |
-| **ORM**            | Prisma ORM                                 |
-| **Authentication** | JWT (JSON Web Token)                       |
-| **Storage**        | Cloud / Local storage for video files      |
+A **centralized AI-powered online fitness platform** that offers:
+
+* Personalized fitness classes with integrated 1-hour timers.
+* Built-in video demonstrations (no external links).
+* AI-generated workout plans and progress recommendations.
+* User-friendly dashboards to track performance over time.
 
 ---
 
-## 🗄️ Database Design
+### 🧰 Tech Stack
 
-### 🔹 Entity-Relationship Diagram (ER Diagram)
+| Layer              | Technology                                                  | Purpose                                 |
+| ------------------ | ----------------------------------------------------------- | --------------------------------------- |
+| **Frontend**       | React.js (Vite), TailwindCSS                                | Interactive UI with animations          |
+| **Backend**        | Node.js + Express.js                                        | RESTful API and server logic            |
+| **Database**       | MySQL                                                       | Structured relational data              |
+| **ORM**            | Prisma ORM                                                  | Database modeling and type safety       |
+| **Authentication** | JWT + bcrypt                                                | Secure authentication and authorization |
+| **AI Integration** | MediaPipe / RapidAPI                                        | Body scan & fitness recommendations     |
+| **Analytics**      | Chart.js                                                    | Visual progress tracking                |
+| **Deployment**     | Vercel (frontend), Render (backend), PlanetScale (database) | Cloud deployment and scaling            |
+
+---
+
+### 👨‍💻 Team Members and Roles
+
+| Team Member | Role                       | Responsibilities                                       |
+| ----------- | -------------------------- | ------------------------------------------------------ |
+| **Garv**    | AI Integration             | Class timer system, AI integration, code structuring   |
+| **Yash**   | Frontend Developer         | React components, workout UI, video player integration |
+| **Harshit** | Backend Developer          | Express routes, authentication, and API endpoints      |
+| **Sudip**    | Database & DevOps Engineer | Prisma schema, migrations, and deployment setup        |
+
+---
+
+### 🎯 Expected Outcome
+
+A fully functional, AI-integrated fitness platform that:
+
+* Offers structured online workout classes.
+* Helps users maintain discipline and consistency.
+* Provides personalized guidance using AI recommendations.
+* Tracks progress automatically for long-term improvement.
+
+---
+
+## 🧱 ER Diagram
+
+### 📊 Entity-Relationship Diagram
 
 ```
         ┌────────────┐
         │   USER     │
-        └────┬───────┘
+        │------------│
+        │ user_id PK │
+        │ name        │
+        │ email       │
+        │ password    │
+        │ age         │
+        │ gender      │
+        │ joined_on   │
+        └────┬────────┘
              │ 1
              │
              │ M
       ┌──────▼────────┐
       │   CLASS       │
+      │---------------│
+      │ class_id PK   │
+      │ class_name    │
+      │ description   │
+      │ duration      │
+      │ start_time    │
+      │ end_time      │
       └────┬──────────┘
            │ 1
            │
            │ M
      ┌─────▼──────────┐
      │   WORKOUT      │
+     │----------------│
+     │ workout_id PK  │
+     │ class_id FK    │
+     │ name           │
+     │ reps           │
+     │ description    │
      └────┬───────────┘
           │ 1
           │
           │ M
     ┌─────▼────────────┐
     │   VIDEO          │
+    │------------------│
+    │ video_id PK      │
+    │ workout_id FK    │
+    │ video_url        │
+    │ thumbnail_url    │
+    │ duration         │
     └──────────────────┘
 
     USER ──< CLASS_PROGRESS >── CLASS
@@ -78,156 +126,155 @@ No external meeting links — everything happens within the app.
 
 ---
 
-## 🧩 Database Schema (Tables)
+## 🗄️ Database Schema
 
-### 1️⃣ **Users Table**
+### 🧍 **User Table**
 
-Stores user information.
-
-| Column       | Type                          | Description          |
-| ------------ | ----------------------------- | -------------------- |
-| user_id (PK) | INT                           | Unique user ID       |
-| name         | VARCHAR(100)                  | Full name            |
-| email        | VARCHAR(100)                  | Unique email         |
-| password     | VARCHAR(255)                  | Hashed password      |
-| age          | INT                           | User age             |
-| gender       | ENUM('Male','Female','Other') | Gender               |
-| joined_on    | DATETIME                      | Date of registration |
+| Column       | Type                          | Description                |
+| ------------ | ----------------------------- | -------------------------- |
+| user_id (PK) | INT                           | Unique user ID             |
+| name         | VARCHAR(100)                  | Full name                  |
+| email        | VARCHAR(100)                  | Unique email               |
+| password     | VARCHAR(255)                  | Encrypted password         |
+| age          | INT                           | User’s age                 |
+| gender       | ENUM('Male','Female','Other') | Gender                     |
+| joined_on    | DATETIME                      | Account creation timestamp |
 
 ---
 
-### 2️⃣ **Classes Table**
+### 🧘 **Class Table**
 
-Each fitness class (1 hour per session).
-
-| Column        | Type         | Description             |
-| ------------- | ------------ | ----------------------- |
-| class_id (PK) | INT          | Unique ID               |
-| class_name    | VARCHAR(100) | e.g., “Full Body Burn”  |
-| description   | TEXT         | Class overview          |
-| duration      | INT          | In minutes (default 60) |
-| start_time    | DATETIME     | Start time of class     |
-| end_time      | DATETIME     | End time (auto +1 hour) |
+| Column        | Type         | Description               |
+| ------------- | ------------ | ------------------------- |
+| class_id (PK) | INT          | Unique class ID           |
+| class_name    | VARCHAR(100) | e.g., “Full Body Burn”    |
+| description   | TEXT         | Overview of class         |
+| duration      | INT          | Default 60 minutes        |
+| start_time    | DATETIME     | When class begins         |
+| end_time      | DATETIME     | Auto set (start + 1 hour) |
 
 ---
 
-### 3️⃣ **Workouts Table**
-
-Workouts linked to each class.
+### 🏋️ **Workout Table**
 
 | Column          | Type         | Description               |
 | --------------- | ------------ | ------------------------- |
 | workout_id (PK) | INT          | Unique workout ID         |
-| class_id (FK)   | INT          | Linked class              |
-| name            | VARCHAR(100) | Workout name              |
+| class_id (FK)   | INT          | Associated class          |
+| name            | VARCHAR(100) | Workout title             |
 | reps            | VARCHAR(50)  | e.g., “3 sets of 15 reps” |
-| description     | TEXT         | Workout details           |
+| description     | TEXT         | Workout instructions      |
 
 ---
 
-### 4️⃣ **Videos Table**
-
-Videos explaining workouts.
+### 🎥 **Video Table**
 
 | Column          | Type         | Description         |
 | --------------- | ------------ | ------------------- |
 | video_id (PK)   | INT          | Unique video ID     |
 | workout_id (FK) | INT          | Linked workout      |
+| video_url       | VARCHAR(255) | Path to video file  |
+| thumbnail_url   | VARCHAR(255) | Video thumbnail     |
 | video_url       | VARCHAR(255) | Video file/link     |    |
 | duration        | INT          | Duration in seconds |
 
 ---
 
-### 5️⃣ **Class_Progress Table**
+### 📊 **Class_Progress Table**
 
-Tracks each user’s class status.
-
-| Column           | Type                                          | Description            |
-| ---------------- | --------------------------------------------- | ---------------------- |
-| progress_id (PK) | INT                                           | Unique progress record |
-| user_id (FK)     | INT                                           | Linked user            |
-| class_id (FK)    | INT                                           | Linked class           |
-| start_time       | DATETIME                                      | When the user started  |
-| end_time         | DATETIME                                      | start_time + 1 hour    |
-| time_remaining   | INT                                           | Remaining seconds      |
-| status           | ENUM('Not Started','In Progress','Completed') | Current state          |
+| Column           | Type                                          | Description               |
+| ---------------- | --------------------------------------------- | ------------------------- |
+| progress_id (PK) | INT                                           | Unique progress record    |
+| user_id (FK)     | INT                                           | User ID                   |
+| class_id (FK)    | INT                                           | Class ID                  |
+| start_time       | DATETIME                                      | When user joined class    |
+| end_time         | DATETIME                                      | End time (auto +1 hr)     |
+| time_remaining   | INT                                           | Remaining time in seconds |
+| status           | ENUM('Not Started','In Progress','Completed') | Class state               |
 
 ---
 
-## 🕐 Timer Functionality
+## ⏱️ Timer-Based Class Flow
 
-* When the user **joins a class**, a record is created in `class_progress`.
-* Backend stores `start_time` and `end_time`.
-* Frontend displays a **countdown timer (60:00)**.
-* Timer stops at 0 → class is marked **Completed**.
-* If the user leaves midway, `time_remaining` saves progress.
-
----
-
-## ⚡ API Endpoints (Example)
-
-| Method | Endpoint                 | Description              |
-| ------ | ------------------------ | ------------------------ |
-| POST   | `/api/register`          | Register a new user      |
-| POST   | `/api/login`             | Login with JWT           |
-| GET    | `/api/classes`           | Fetch all classes        |
-| POST   | `/api/join/:classId`     | Start a class session    |
-| GET    | `/api/progress/:userId`  | View progress            |
-| GET    | `/api/workouts/:classId` | Get workouts for a class |
-| GET    | `/api/videos/:workoutId` | Get videos for a workout |
+1. When a user joins a class, a **1-hour timer** begins.
+2. The user sees **6–7 workouts** assigned to that class.
+3. Each workout includes a **tutorial video** (optional to view).
+4. Timer counts down in real-time on the frontend.
+5. After 60 minutes, the class auto-completes, and progress is saved.
 
 ---
 
-## 🔐 Authentication (JWT)
+## ⚙️ Setup Instructions
 
-* JWT is used to protect routes.
-* When a user logs in, a **JWT token** is issued.
-* Protected routes (like joining class, viewing progress) require a valid token in headers.
+### 1️⃣ Clone Repository
 
----
+```bash
+git clone https://github.com/yourusername/ai-fitness-platform.git
+cd ai-fitness-platform
+```
 
-## 💻 Installation
+### 2️⃣ Install Dependencies
 
-1. Clone the repository
+```bash
+npm install
+```
 
-   ```bash
-   git clone https://github.com/yourusername/online-fitness-platform.git
-   ```
-2. Navigate to the project
+### 3️⃣ Setup Environment Variables
 
-   ```bash
-   cd online-fitness-platform
-   ```
-3. Install dependencies
+Create a `.env` file:
 
-   ```bash
-   npm install
-   ```
-4. Configure `.env` file
+```env
+DATABASE_URL="your_database_url"
+JWT_SECRET="your_secret_key"
+```
 
-   ```env
-   DATABASE_URL="your_database_url_here"
-   JWT_SECRET="your_secret_key"
-   ```
-5. Run the development server
+### 4️⃣ Initialize Prisma and Database
 
-   ```bash
-   npm run dev
-   ```
+```bash
+npx prisma migrate dev --name init
+```
 
----
+### 5️⃣ Run the Development Server
 
-## 🧠 Future Enhancements
+```bash
+npm run dev
+```
 
-* Add personalized workout recommendations.
-* Add streak tracking and daily challenges.
-* Introduce subscription plans and payments.
-* Enable live chat with fitness trainers.
+Access the app at:
+
+* **Frontend:** [http://localhost:5173](http://localhost:5173)
+* **Backend:** [http://localhost:5000](http://localhost:5000)
 
 ---
 
+## 🧹 Design & Code Quality
 
-## ✨ Author
+### ✅ ER Diagram
 
-Developed by **Garv Sudip Harshit Yash** ❤️
-For learning, practice, and portfolio purposes.
+* Well-labeled entities and relationships shown above.
+
+### ✅ Code Cleanliness
+
+* Organized folder structure:
+
+  ```
+  /client     → React frontend  
+  /server     → Express backend  
+  /prisma     → Schema and migrations  
+  ```
+* Descriptive variable and function names.
+* Modular and reusable React components.
+* No unused or commented-out code.
+
+---
+
+## 🏁 Expected Outcome
+
+A robust, modern, and scalable **AI-driven fitness platform** where users can train effectively online, track progress, and receive AI-guided insights to achieve their fitness goals.
+
+---
+
+## 👥 Team Credits
+
+Developed with ❤️ by
+**Garv**, **Sudip**, **Harshit**, and **Yash**.
