@@ -133,8 +133,7 @@ Videos explaining workouts.
 | --------------- | ------------ | ------------------- |
 | video_id (PK)   | INT          | Unique video ID     |
 | workout_id (FK) | INT          | Linked workout      |
-| video_url       | VARCHAR(255) | Video file/link     |
-| thumbnail_url   | VARCHAR(255) | Thumbnail image     |
+| video_url       | VARCHAR(255) | Video file/link     |    |
 | duration        | INT          | Duration in seconds |
 
 ---
