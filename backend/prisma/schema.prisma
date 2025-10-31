@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  user_id     Int              @id @default(autoincrement())
+  name        String
+  email       String           @unique
+  password    String
+  age         Int?
+  gender      Gender
+  joined_on   DateTime         @default(now())
+
+  classes     Class[]
+  progress    ClassProgress[]
+}
+
+model Class {
+  class_id     Int              @id @default(autoincrement())
+  class_name   String
+  description  String?
+  duration     Int              @default(60) // minutes
+  start_time   DateTime
+  end_time     DateTime
+
+  workouts     Workout[]
+  progress     ClassProgress[]
+
+  user         User?            @relation(fields: [user_id], references: [user_id])
+  user_id      Int?
+}
+
+model Workout {
+  workout_id   Int       @id @default(autoincrement())
+  class_id     Int
+  name         String
+  reps         String?
+  description  String?
+
+  class        Class     @relation(fields: [class_id], references: [class_id])
+  videos       Video[]
+}
+
+model Video {
+  video_id      Int     @id @default(autoincrement())
+  workout_id    Int
+  video_url     String
+  thumbnail_url String?
+  duration      Int?
+
+  workout       Workout @relation(fields: [workout_id], references: [workout_id])
+}
+
+model ClassProgress {
+  progress_id     Int       @id @default(autoincrement())
+  user_id         Int
+  class_id        Int
+  start_time      DateTime  @default(now())
+  end_time        DateTime?
+  time_remaining  Int?
+  status          ProgressStatus @default(Not_Started)
+
+  user            User     @relation(fields: [user_id], references: [user_id])
+  class           Class    @relation(fields: [class_id], references: [class_id])
+}
+//adding comment
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum ProgressStatus {
+  Not_Started
+  In_Progress
+  Completed
+}
